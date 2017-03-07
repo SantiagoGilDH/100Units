@@ -10,12 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.santiagogil.a100units.R;
+import com.santiagogil.a100units.pojos.Unit;
 
 public class FragmentMain extends Fragment {
 
     private RecyclerView recyclerView;
+    private ActivityCommunicator activityCommunicator;
 
-
+    public void setActivityCommunicator(ActivityCommunicator activityCommunicator) {
+        this.activityCommunicator = activityCommunicator;
+    }
 
     public FragmentMain() {
         // Required empty public constructor
@@ -28,12 +32,16 @@ public class FragmentMain extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        UnitRecyclerAdapter unitRecyclerAdapter = new UnitRecyclerAdapter(getContext());
+        UnitRecyclerAdapter unitRecyclerAdapter = new UnitRecyclerAdapter(getContext(), activityCommunicator);
         recyclerView.setAdapter(unitRecyclerAdapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 10);
         recyclerView.setLayoutManager(gridLayoutManager);
 
         return view;
+    }
+
+    public interface ActivityCommunicator{
+        void onUnitTouched(Unit unit);
     }
 
 }

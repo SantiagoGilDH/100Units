@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.santiagogil.a100units.R;
 import com.santiagogil.a100units.pojos.Unit;
@@ -17,33 +18,41 @@ public class UnitRecyclerAdapter extends RecyclerView.Adapter {
 
     private List<Unit> units;
     private Context context;
+    private FragmentMain.ActivityCommunicator activityCommunicator;
 
     public List<Unit> getUnits() {
         return units;
     }
 
-    public UnitRecyclerAdapter(Context context) {
+    public UnitRecyclerAdapter(Context context, FragmentMain.ActivityCommunicator activityCommunicator) {
         this.context = context;
         this.units = new ArrayList<>();
         loadUnits();
+        this.activityCommunicator = activityCommunicator;
     }
 
     private void loadUnits(){
         for(Integer i = 0; i < 100; i++){
-            units.add(new Unit());
+            Unit unit = new Unit();
+            unit.setID(i.toString());
+            unit.setDescription("Lorem" + i.toString());
+            units.add(unit);
         }
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.detail_unit, parent, false);
-        return new UnitViewHolder(view);
+        View view = inflater.inflate(R.layout.little_square_unit, parent, false);
+        return new UnitViewHolder(view, activityCommunicator);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
+        Unit unit = units.get(position);
+        UnitViewHolder unitViewHolder = (UnitViewHolder) holder;
+        unitViewHolder.loadUnit(unit);
     }
 
     @Override
@@ -53,16 +62,30 @@ public class UnitRecyclerAdapter extends RecyclerView.Adapter {
 
     static class UnitViewHolder extends RecyclerView.ViewHolder{
 
-        public UnitViewHolder(final View itemView) {
+        private Unit unit;
+        private TextView textView;
+        private FragmentMain.ActivityCommunicator activityCommunicator;
+
+        public UnitViewHolder(final View itemView, final FragmentMain.ActivityCommunicator activityCommunicator) {
             super(itemView);
+             textView = (TextView) itemView.findViewById(R.id.text_view_unit_id);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    itemView.setBackgroundColor(Color.RED);
+                   activityCommunicator.onUnitTouched(unit);
                 }
             });
+
         }
 
+        public void loadUnit(Unit unit) {
+            this.unit = unit;
+            textView.setText(unit.getID());
+
+        }
+    }
+
+    public interface OnUnitTouchedListener extends View.OnClickListener{
 
     }
 
