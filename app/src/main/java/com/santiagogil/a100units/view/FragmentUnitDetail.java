@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import com.santiagogil.a100units.R;
 
@@ -18,6 +19,7 @@ import org.w3c.dom.Text;
 public class FragmentUnitDetail extends Fragment {
 
 
+    private ViewSwitcher viewSwitcher;
     private TextView textViewUnitDescription;
     private TextView textViewUnitID;
     private EditText editTextUnitDescripton;
@@ -48,6 +50,7 @@ public class FragmentUnitDetail extends Fragment {
         textViewUnitID = (TextView) view.findViewById(R.id.text_view_unit_id);
         editTextUnitDescripton = (EditText) view.findViewById(R.id.edit_text_unit_description);
         buttonSaveChanges = (Button) view.findViewById(R.id.button_save_changes);
+        viewSwitcher = (ViewSwitcher) view.findViewById(R.id.view_switcher);
 
         textViewUnitDescription.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,13 +78,7 @@ public class FragmentUnitDetail extends Fragment {
             }
         }
 
-        buttonSaveChanges.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                saveChanges();
-            }
-        });
+        setButtonToSwitchToEditView();
 
         return view;
     }
@@ -93,8 +90,32 @@ public class FragmentUnitDetail extends Fragment {
         onSaveChangesListener
                 .saveChanges(bundle.getInt(UNITPOSITION), updatedDescription);
         textViewUnitDescription.setText(updatedDescription);
-        editTextUnitDescripton.setVisibility(View.INVISIBLE);
-        textViewUnitDescription.setVisibility(View.VISIBLE);
+        viewSwitcher.getNextView();
+    }
+
+    private void setButtonToSwitchToEditView(){
+        buttonSaveChanges.setText("Edit");
+        buttonSaveChanges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchToEditView(bundle.getString(UNITDESCRIPTION));
+            }
+        });
+        setButtonToSaveChanges();
+    }
+
+    private void setButtonToSaveChanges() {
+
+        buttonSaveChanges.setText("Save");
+
+        buttonSaveChanges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                saveChanges();
+            }
+        });
+
     }
 
     private void switchToEditView(String description) {
@@ -104,11 +125,6 @@ public class FragmentUnitDetail extends Fragment {
         } else {
             editTextUnitDescripton.setHint(description);
         }
-        textViewUnitDescription.setVisibility(View.INVISIBLE);
-        editTextUnitDescripton.setVisibility(View.VISIBLE);
-        buttonSaveChanges.setVisibility(View.VISIBLE);
-
-
     }
 
     public interface OnSaveChangesListener{

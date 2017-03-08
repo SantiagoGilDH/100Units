@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Acti
 
         loadLittleFragment();
 
-
     }
 
     private void loadLittleFragment() {
