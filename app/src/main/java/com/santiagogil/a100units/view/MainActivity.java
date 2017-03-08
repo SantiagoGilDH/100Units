@@ -6,13 +6,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.santiagogil.a100units.R;
 import com.santiagogil.a100units.pojos.Unit;
 
-public class MainActivity extends AppCompatActivity implements FragmentMain.ActivityCommunicator{
+public class MainActivity extends AppCompatActivity implements FragmentMain.ActivityCommunicator, FragmentUnitDetail.OnSaveChangesListener {
 
     private FragmentManager fragmentManager;
+    private FragmentMain mainFragment;
+    private FragmentUnitDetail littleFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,11 +27,14 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Acti
         loadMainFragment();
 
         loadLittleFragment();
+
+
     }
 
     private void loadLittleFragment() {
 
-        Fragment littleFragment = new FragmentUnitDetail();
+        littleFragment = new FragmentUnitDetail();
+        littleFragment.setOnSaveChangesListener(MainActivity.this);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.little_fragment_holder, littleFragment);
         fragmentTransaction.commit();
@@ -37,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Acti
 
     private void loadMainFragment() {
 
-        FragmentMain mainFragment = new FragmentMain();
+        mainFragment = new FragmentMain();
         mainFragment.setActivityCommunicator(MainActivity.this);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_holder, mainFragment);
@@ -45,22 +51,31 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Acti
 
     }
 
-
     @Override
-    public void onUnitTouched(Unit unit) {
+    public void onUnitTouched(Unit unit, Integer position) {
 
-        updateLittleFragment(unit);
+        updateLittleFragment(unit, position);
     }
 
-    private void updateLittleFragment(Unit unit){
+    private void updateLittleFragment(Unit unit, Integer position){
 
         FragmentUnitDetail fragmentUnitDetail = new FragmentUnitDetail();
+        fragmentUnitDetail.setOnSaveChangesListener(MainActivity.this);
         Bundle bundle = new Bundle();
-        bundle.putString("", unit.getDescription())
+        bundle.putString(FragmentUnitDetail.UNITDESCRIPTION, unit.getDescription());
+        bundle.putString(FragmentUnitDetail.UNITID, unit.getID());
+        bundle.putInt(FragmentUnitDetail.UNITPOSITION, position);
+        fragmentUnitDetail.setArguments(bundle);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.little_fragment_holder, fragmentUnitDetail);
-        fragmentTransaction.commit()
+        fragmentTransaction.commit();
 
+    }
+
+    @Override
+    public void saveChanges(Integer position, String description) {
+
+        mainFragment.updateUnit(position, description);
 
     }
 }

@@ -32,10 +32,10 @@ public class UnitRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     private void loadUnits(){
-        for(Integer i = 0; i < 100; i++){
+        for(Integer i = 1; i <= 100; i++){
             Unit unit = new Unit();
             unit.setID(i.toString());
-            unit.setDescription("Lorem" + i.toString());
+            unit.setDescription("");
             units.add(unit);
         }
     }
@@ -53,6 +53,7 @@ public class UnitRecyclerAdapter extends RecyclerView.Adapter {
         Unit unit = units.get(position);
         UnitViewHolder unitViewHolder = (UnitViewHolder) holder;
         unitViewHolder.loadUnit(unit);
+        unitViewHolder.setPosition(position);
     }
 
     @Override
@@ -63,16 +64,25 @@ public class UnitRecyclerAdapter extends RecyclerView.Adapter {
     static class UnitViewHolder extends RecyclerView.ViewHolder{
 
         private Unit unit;
+        private Integer position;
+        private View itemView;
+
+        public void setPosition(Integer position) {
+            this.position = position;
+        }
+
         private TextView textView;
         private FragmentMain.ActivityCommunicator activityCommunicator;
 
         public UnitViewHolder(final View itemView, final FragmentMain.ActivityCommunicator activityCommunicator) {
             super(itemView);
-             textView = (TextView) itemView.findViewById(R.id.text_view_unit_id);
+            this.itemView = itemView;
+            textView = (TextView) itemView.findViewById(R.id.text_view_unit_id);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   activityCommunicator.onUnitTouched(unit);
+
+                   activityCommunicator.onUnitTouched(unit, position);
                 }
             });
 
@@ -81,12 +91,9 @@ public class UnitRecyclerAdapter extends RecyclerView.Adapter {
         public void loadUnit(Unit unit) {
             this.unit = unit;
             textView.setText(unit.getID());
-
+            if(!unit.getDescription().equals("")){
+                itemView.setBackgroundColor(Color.GRAY);
+            }
         }
     }
-
-    public interface OnUnitTouchedListener extends View.OnClickListener{
-
-    }
-
 }

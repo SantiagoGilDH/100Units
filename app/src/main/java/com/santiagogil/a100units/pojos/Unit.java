@@ -5,6 +5,8 @@ import android.graphics.Color;
 public class Unit {
 
     private String ID;
+    private String description;
+    private Color color;
 
     public String getID() {
         return ID;
@@ -14,8 +16,6 @@ public class Unit {
         this.ID = ID;
     }
 
-    private String description;
-    private Color color;
 
     public String getDescription() {
         return description;
