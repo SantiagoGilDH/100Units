@@ -48,7 +48,7 @@ public class UnitsDAO {
 
     }
 
-    public void getUnitsFromLocalDatabase(){
+    public List<Unit> getUnitsFromLocalDatabase(){
 
         SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
@@ -68,5 +68,18 @@ public class UnitsDAO {
 
         }
 
+        return units;
+
+    }
+
+    public void updateUnitDescription(Integer position, String description) {
+
+        SQLiteDatabase database = databaseHelper.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+
+        cv.put(DatabaseHelper.DESCRIPTION, description);
+
+        database.update(DatabaseHelper.TABLEUNITS, cv, DatabaseHelper.ID + " = " + (position + 1), null);
     }
 }

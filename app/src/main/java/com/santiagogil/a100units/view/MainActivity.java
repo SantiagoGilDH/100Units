@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.santiagogil.a100units.R;
+import com.santiagogil.a100units.controller.UnitsController;
 import com.santiagogil.a100units.model.pojos.Unit;
+import com.santiagogil.a100units.utils.DatabaseHelper;
 
 public class MainActivity extends AppCompatActivity implements FragmentMain.ActivityCommunicator, FragmentUnitDetail.OnSaveChangesListener {
 

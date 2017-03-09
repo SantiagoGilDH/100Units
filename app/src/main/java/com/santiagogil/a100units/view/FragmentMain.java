@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.santiagogil.a100units.R;
+import com.santiagogil.a100units.controller.UnitsController;
 import com.santiagogil.a100units.model.pojos.Unit;
 
 public class FragmentMain extends Fragment {
@@ -34,6 +35,7 @@ public class FragmentMain extends Fragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         unitRecyclerAdapter = new UnitRecyclerAdapter(getContext(), activityCommunicator);
+        loadUnitsInRecyclerAdapter();
         recyclerView.setAdapter(unitRecyclerAdapter);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 10);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -43,7 +45,9 @@ public class FragmentMain extends Fragment {
 
     public void updateUnit(Integer position, String description) {
 
-            unitRecyclerAdapter.getUnits().get(position).setDescription(description);
+            UnitsController unitsController = new UnitsController();
+            unitsController.updateUnitDescription(getContext(), position, description);
+            unitRecyclerAdapter.setUnits(unitsController.getUnits(getContext()));
             unitRecyclerAdapter.notifyDataSetChanged();
 
     }
@@ -51,6 +55,13 @@ public class FragmentMain extends Fragment {
 
     public interface ActivityCommunicator{
         void onUnitTouched(Unit unit, Integer position);
+    }
+
+    private void loadUnitsInRecyclerAdapter(){
+
+        UnitsController unitsController = new UnitsController();
+        unitRecyclerAdapter.setUnits(unitsController.getUnits(getContext()));
+
     }
 
 }

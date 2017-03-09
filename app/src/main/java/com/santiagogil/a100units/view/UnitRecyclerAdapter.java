@@ -24,20 +24,15 @@ public class UnitRecyclerAdapter extends RecyclerView.Adapter {
         return units;
     }
 
+    public void setUnits(List<Unit> units) {
+        this.units = units;
+    }
+
     public UnitRecyclerAdapter(Context context, FragmentMain.ActivityCommunicator activityCommunicator) {
         this.context = context;
         this.units = new ArrayList<>();
-        loadUnits();
-        this.activityCommunicator = activityCommunicator;
-    }
 
-    private void loadUnits(){
-        for(Integer i = 1; i <= 100; i++){
-            Unit unit = new Unit();
-            unit.setID(i.toString());
-            unit.setDescription("");
-            units.add(unit);
-        }
+        this.activityCommunicator = activityCommunicator;
     }
 
     @Override

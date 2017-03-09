@@ -52,35 +52,50 @@ public class FragmentUnitDetail extends Fragment {
         buttonSaveChanges = (Button) view.findViewById(R.id.button_save_changes);
         viewSwitcher = (ViewSwitcher) view.findViewById(R.id.view_switcher);
 
-        textViewUnitDescription.setOnClickListener(new View.OnClickListener() {
+        viewSwitcher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (bundle.getString(UNITDESCRIPTION) != null){
+
                 switchToEditView(bundle.getString(UNITDESCRIPTION));
+
+                }else{
+                    switchToEditView("");
+                }
             }
         });
+
+        updateWithInfoFromBundle();
+
+        return view;
+    }
+
+    private void updateWithInfoFromBundle() {
 
         bundle = getArguments();
 
         if(bundle != null){
 
+            setButtonToSwitchToEditView();
+
             textViewUnitID.setText("Unit " + bundle.getString(UNITID));
 
             String unitDescritption = bundle.getString(UNITDESCRIPTION);
 
-            if(unitDescritption.equals("")){
+            if(unitDescritption.equals("") || unitDescritption.equals(null)){
 
                 switchToEditView(unitDescritption);
 
             }else {
 
-                textViewUnitDescription.setText( bundle.getString(UNITDESCRIPTION));
+                textViewUnitDescription.setText(unitDescritption);
 
             }
+        } else{
+            buttonSaveChanges.setVisibility(View.INVISIBLE);
+            textViewUnitID.setText("Touch a unit");
+            textViewUnitDescription.setVisibility(View.INVISIBLE);
         }
-
-        setButtonToSwitchToEditView();
-
-        return view;
     }
 
     private void saveChanges() {
@@ -90,7 +105,8 @@ public class FragmentUnitDetail extends Fragment {
         onSaveChangesListener
                 .saveChanges(bundle.getInt(UNITPOSITION), updatedDescription);
         textViewUnitDescription.setText(updatedDescription);
-        viewSwitcher.getNextView();
+        viewSwitcher.showPrevious();
+        setButtonToSwitchToEditView();
     }
 
     private void setButtonToSwitchToEditView(){
@@ -101,7 +117,6 @@ public class FragmentUnitDetail extends Fragment {
                 switchToEditView(bundle.getString(UNITDESCRIPTION));
             }
         });
-        setButtonToSaveChanges();
     }
 
     private void setButtonToSaveChanges() {
@@ -120,11 +135,18 @@ public class FragmentUnitDetail extends Fragment {
 
     private void switchToEditView(String description) {
 
+        buttonSaveChanges.setVisibility(View.VISIBLE);
+        viewSwitcher.showNext();
+
         if (description.equals("")){
-            editTextUnitDescripton.setHint("Description");
+            editTextUnitDescripton.setHint("Add a Description");
         } else {
-            editTextUnitDescripton.setHint(description);
+            editTextUnitDescripton.setText(description);
         }
+
+        textViewUnitDescription.setText("Cago en la puta");
+
+        setButtonToSaveChanges();
     }
 
     public interface OnSaveChangesListener{

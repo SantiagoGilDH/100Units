@@ -22,23 +22,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Values
 
+    // Create Table Clauses
+
+    private static final String CREATE_TABLE_UNITS = "CREATE TABLE " + TABLEUNITS + " ("
+            + ID + " STRING PRIMARY KEY, "
+            + DESCRIPTION + " STRING, "
+            + COLOR + " STRING, "
+            + USER + " STRING "
+            + ")";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASENAME, null, DATABASEVERSION);
     }
 
 
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
+        sqLiteDatabase.execSQL(CREATE_TABLE_UNITS);
 
     }
 
-    private static final String CREATE_TABLE_UNITS = "CREATE TABLE " + "("
-            + ID + " STRING PRIMARY KEY,"
-            + DESCRIPTION + " STRING,"
-            + COLOR + " STRING,"
-            + USER + " STRING"
-            + ")";
+
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
