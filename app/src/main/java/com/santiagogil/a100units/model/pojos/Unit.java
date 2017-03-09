@@ -1,4 +1,4 @@
-package com.santiagogil.a100units.pojos;
+package com.santiagogil.a100units.model.pojos;
 
 import android.graphics.Color;
 

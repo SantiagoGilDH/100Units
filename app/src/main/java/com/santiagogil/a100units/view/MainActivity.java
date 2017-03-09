@@ -1,15 +1,12 @@
 package com.santiagogil.a100units.view;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import com.santiagogil.a100units.R;
-import com.santiagogil.a100units.pojos.Unit;
+import com.santiagogil.a100units.model.pojos.Unit;
 
 public class MainActivity extends AppCompatActivity implements FragmentMain.ActivityCommunicator, FragmentUnitDetail.OnSaveChangesListener {
 

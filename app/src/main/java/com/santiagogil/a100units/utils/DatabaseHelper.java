@@ -15,6 +15,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Columns
     public static final String ID = "ID";
+    public static final String DESCRIPTION = "Description";
+    public static final String USER = "User";
+    public static final String COLOR = "Color";
 
 
     //Values
@@ -30,18 +33,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    private static final String CREATE_TABLE_ITEMS = "CREATE TABLE " +  "("
+    private static final String CREATE_TABLE_UNITS = "CREATE TABLE " + "("
             + ID + " STRING PRIMARY KEY,"
-
+            + DESCRIPTION + " STRING,"
+            + COLOR + " STRING,"
+            + USER + " STRING"
             + ")";
-
-
-    private static final String CREATE_TABLE_CONSUMPTIONS = "CREATE TABLE " +  "("
-            + ID + " STRING PRIMARY KEY,"
-
-            + ")";
-
-
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {

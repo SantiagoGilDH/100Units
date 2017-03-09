@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.santiagogil.a100units.R;
-import com.santiagogil.a100units.pojos.Unit;
+import com.santiagogil.a100units.model.pojos.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
