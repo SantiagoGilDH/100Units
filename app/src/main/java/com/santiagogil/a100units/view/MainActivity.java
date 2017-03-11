@@ -6,15 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.santiagogil.a100units.R;
-import com.santiagogil.a100units.controller.UnitsController;
 import com.santiagogil.a100units.model.pojos.Unit;
-import com.santiagogil.a100units.utils.DatabaseHelper;
 
 public class MainActivity extends AppCompatActivity implements FragmentMain.ActivityCommunicator, FragmentUnitDetail.OnSaveChangesListener {
 
     private FragmentManager fragmentManager;
     private FragmentMain mainFragment;
-    private FragmentUnitDetail littleFragment;
+    private FragmentUnitDetail fragmentUnitDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +29,10 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Acti
 
     private void loadLittleFragment() {
 
-        littleFragment = new FragmentUnitDetail();
-        littleFragment.setOnSaveChangesListener(MainActivity.this);
+        fragmentUnitDetail = new FragmentUnitDetail();
+        fragmentUnitDetail.setOnSaveChangesListener(MainActivity.this);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.little_fragment_holder, littleFragment);
+        fragmentTransaction.replace(R.id.little_fragment_holder, fragmentUnitDetail);
         fragmentTransaction.commit();
 
     }
@@ -49,15 +47,11 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Acti
 
     }
 
-    @Override
-    public void onUnitTouched(Unit unit, Integer position) {
 
-        updateLittleFragment(unit, position);
-    }
 
     private void updateLittleFragment(Unit unit, Integer position){
 
-        FragmentUnitDetail fragmentUnitDetail = new FragmentUnitDetail();
+        fragmentUnitDetail = new FragmentUnitDetail();
         fragmentUnitDetail.setOnSaveChangesListener(MainActivity.this);
         Bundle bundle = new Bundle();
         bundle.putString(FragmentUnitDetail.UNITDESCRIPTION, unit.getDescription());
@@ -75,5 +69,14 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Acti
 
         mainFragment.updateUnit(position, description);
 
+    }
+
+    @Override
+    public void onUnitTouched(Unit unit, Integer position) {
+
+        if(fragmentUnitDetail.getOnEditMode()){
+            fragmentUnitDetail.saveChanges();
+        }
+        updateLittleFragment(unit, position);
     }
 }

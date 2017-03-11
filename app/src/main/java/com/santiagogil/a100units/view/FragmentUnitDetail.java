@@ -3,12 +3,14 @@ package com.santiagogil.a100units.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.santiagogil.a100units.R;
@@ -25,15 +27,18 @@ public class FragmentUnitDetail extends Fragment {
     private EditText editTextUnitDescripton;
     private Button buttonSaveChanges;
     private OnSaveChangesListener onSaveChangesListener;
+    private Boolean onEditMode = true;
+    private Bundle bundle;
+
+    public static final String UNITDESCRIPTION = "UnitDescription";
+    public static final String UNITID = "UnitID";
+    public static final String UNITPOSITION = "UnitPosition";
 
     public void setOnSaveChangesListener(OnSaveChangesListener onSaveChangesListener) {
         this.onSaveChangesListener = onSaveChangesListener;
     }
 
-    public static final String UNITDESCRIPTION = "UnitDescription";
-    public static final String UNITID = "UnitID";
-    public static final String UNITPOSITION = "UnitPosition";
-    private Bundle bundle;
+
 
 
     public FragmentUnitDetail() {
@@ -55,7 +60,7 @@ public class FragmentUnitDetail extends Fragment {
         viewSwitcher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (bundle.getString(UNITDESCRIPTION) != null){
+                if (bundle != null){
 
                 switchToEditView(bundle.getString(UNITDESCRIPTION));
 
@@ -92,21 +97,31 @@ public class FragmentUnitDetail extends Fragment {
 
             }
         } else{
+            onEditMode = false;
             buttonSaveChanges.setVisibility(View.INVISIBLE);
             textViewUnitID.setText("Touch a unit");
             textViewUnitDescription.setVisibility(View.INVISIBLE);
         }
     }
 
-    private void saveChanges() {
+    public Boolean getOnEditMode() {
+        return onEditMode;
+    }
 
-        String updatedDescription = editTextUnitDescripton.getText().toString();
+    public void saveChanges() {
 
-        onSaveChangesListener
-                .saveChanges(bundle.getInt(UNITPOSITION), updatedDescription);
-        textViewUnitDescription.setText(updatedDescription);
-        viewSwitcher.showPrevious();
-        setButtonToSwitchToEditView();
+        onEditMode = false;
+        if(bundle != null) {
+            String updatedDescription = editTextUnitDescripton.getText().toString();
+            onSaveChangesListener
+                    .saveChanges(bundle.getInt(UNITPOSITION), updatedDescription);
+            textViewUnitDescription.setText(updatedDescription);
+            viewSwitcher.showPrevious();
+            setButtonToSwitchToEditView();
+        } else{
+           Log.v("PROBLEM", "Bundle is null");
+        }
+
     }
 
     private void setButtonToSwitchToEditView(){
@@ -135,6 +150,7 @@ public class FragmentUnitDetail extends Fragment {
 
     private void switchToEditView(String description) {
 
+        onEditMode = true;
         buttonSaveChanges.setVisibility(View.VISIBLE);
         viewSwitcher.showNext();
 
@@ -144,9 +160,8 @@ public class FragmentUnitDetail extends Fragment {
             editTextUnitDescripton.setText(description);
         }
 
-        textViewUnitDescription.setText("Cago en la puta");
-
         setButtonToSaveChanges();
+
     }
 
     public interface OnSaveChangesListener{

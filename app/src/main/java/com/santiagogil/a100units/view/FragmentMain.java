@@ -27,7 +27,6 @@ public class FragmentMain extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,9 +48,7 @@ public class FragmentMain extends Fragment {
             unitsController.updateUnitDescription(getContext(), position, description);
             unitRecyclerAdapter.setUnits(unitsController.getUnits(getContext()));
             unitRecyclerAdapter.notifyDataSetChanged();
-
     }
-
 
     public interface ActivityCommunicator{
         void onUnitTouched(Unit unit, Integer position);
@@ -63,5 +60,4 @@ public class FragmentMain extends Fragment {
         unitRecyclerAdapter.setUnits(unitsController.getUnits(getContext()));
 
     }
-
 }

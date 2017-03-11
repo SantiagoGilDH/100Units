@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.santiagogil.a100units.R;
@@ -45,6 +46,7 @@ public class UnitRecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
+
         Unit unit = units.get(position);
         UnitViewHolder unitViewHolder = (UnitViewHolder) holder;
         unitViewHolder.loadUnit(unit);
@@ -58,6 +60,7 @@ public class UnitRecyclerAdapter extends RecyclerView.Adapter {
 
     static class UnitViewHolder extends RecyclerView.ViewHolder{
 
+        private LinearLayout innerLayout;
         private Unit unit;
         private Integer position;
         private View itemView;
@@ -80,6 +83,7 @@ public class UnitRecyclerAdapter extends RecyclerView.Adapter {
                    activityCommunicator.onUnitTouched(unit, position);
                 }
             });
+            innerLayout = (LinearLayout) itemView.findViewById(R.id.inner_layout);
 
         }
 
@@ -87,7 +91,7 @@ public class UnitRecyclerAdapter extends RecyclerView.Adapter {
             this.unit = unit;
             textView.setText(unit.getID());
             if(!unit.getDescription().equals("")){
-                itemView.setBackgroundColor(Color.GRAY);
+                innerLayout.setBackgroundColor(Color.CYAN);
             }
         }
     }
