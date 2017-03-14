@@ -4,6 +4,7 @@ package com.santiagogil.a100units.view;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,17 +14,19 @@ import com.santiagogil.a100units.R;
 import com.santiagogil.a100units.controller.UnitsController;
 import com.santiagogil.a100units.model.pojos.Unit;
 
-public class FragmentMain extends Fragment {
+public class FragmentUnitRecyclerView extends Fragment {
 
     private RecyclerView recyclerView;
     private ActivityCommunicator activityCommunicator;
     private UnitRecyclerAdapter unitRecyclerAdapter;
+    private Boolean onListViewMode;
+    private Boolean onGridViewMode;
 
     public void setActivityCommunicator(ActivityCommunicator activityCommunicator) {
         this.activityCommunicator = activityCommunicator;
     }
 
-    public FragmentMain() {
+    public FragmentUnitRecyclerView() {
         // Required empty public constructor
     }
 
@@ -32,12 +35,12 @@ public class FragmentMain extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
+        onListViewMode = false;
+        onGridViewMode = false;
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        unitRecyclerAdapter = new UnitRecyclerAdapter(getContext(), activityCommunicator);
-        loadUnitsInRecyclerAdapter();
-        recyclerView.setAdapter(unitRecyclerAdapter);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 10);
-        recyclerView.setLayoutManager(gridLayoutManager);
+
+        switchToGridView();
 
         return view;
     }
@@ -48,6 +51,49 @@ public class FragmentMain extends Fragment {
             unitsController.updateUnitDescription(getContext(), position, description);
             unitRecyclerAdapter.setUnits(unitsController.getUnits(getContext()));
             unitRecyclerAdapter.notifyDataSetChanged();
+    }
+
+    public void switchViewMode() {
+
+        if(onListViewMode){
+            switchToGridView();
+        } else {
+            switchToListView();
+        }
+
+    }
+
+    private void switchToListView() {
+
+        onGridViewMode = false;
+        onListViewMode = true;
+        unitRecyclerAdapter = new UnitListRecyclerAdapter(getContext(), activityCommunicator);
+        loadUnitsInRecyclerAdapter();
+        recyclerView.setAdapter(unitRecyclerAdapter);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+    }
+
+    private void switchToGridView() {
+
+        onGridViewMode = true;
+        onListViewMode = false;
+        unitRecyclerAdapter = new UnitGridRecyclerAdapter(getContext(), activityCommunicator);
+        loadUnitsInRecyclerAdapter();
+        recyclerView.setAdapter(unitRecyclerAdapter);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 10);
+        recyclerView.setLayoutManager(gridLayoutManager);
+
+    }
+
+    private void toggleOnGridViewMode() {
+
+        onGridViewMode = !onGridViewMode;
+    }
+
+    private void toggleOnListViewMode(){
+
+        onListViewMode = !onListViewMode;
     }
 
     public interface ActivityCommunicator{

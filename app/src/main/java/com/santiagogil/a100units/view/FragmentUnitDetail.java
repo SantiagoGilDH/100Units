@@ -27,7 +27,7 @@ public class FragmentUnitDetail extends Fragment {
     private EditText editTextUnitDescripton;
     private Button buttonSaveChanges;
     private OnSaveChangesListener onSaveChangesListener;
-    private Boolean onEditMode = true;
+    private Boolean onEditMode;
     private Bundle bundle;
 
     public static final String UNITDESCRIPTION = "UnitDescription";
@@ -38,9 +38,6 @@ public class FragmentUnitDetail extends Fragment {
         this.onSaveChangesListener = onSaveChangesListener;
     }
 
-
-
-
     public FragmentUnitDetail() {
         // Required empty public constructor
     }
@@ -50,6 +47,7 @@ public class FragmentUnitDetail extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_unit_detail, container, false);
+        onEditMode = false;
 
         textViewUnitDescription = (TextView) view.findViewById(R.id.text_view_unit_description);
         textViewUnitID = (TextView) view.findViewById(R.id.text_view_unit_id);
@@ -81,8 +79,6 @@ public class FragmentUnitDetail extends Fragment {
 
         if(bundle != null){
 
-            setButtonToSwitchToEditView();
-
             textViewUnitID.setText("Unit " + bundle.getString(UNITID));
 
             String unitDescritption = bundle.getString(UNITDESCRIPTION);
@@ -94,6 +90,8 @@ public class FragmentUnitDetail extends Fragment {
             }else {
 
                 textViewUnitDescription.setText(unitDescritption);
+                setButtonToSwitchToEditView();
+                viewSwitcher.setVisibility(View.VISIBLE);
 
             }
         } else{
@@ -117,7 +115,10 @@ public class FragmentUnitDetail extends Fragment {
                     .saveChanges(bundle.getInt(UNITPOSITION), updatedDescription);
             textViewUnitDescription.setText(updatedDescription);
             viewSwitcher.showPrevious();
-            setButtonToSwitchToEditView();
+            viewSwitcher.setVisibility(View.VISIBLE);
+            if(!updatedDescription.equals("")){
+                setButtonToSwitchToEditView();
+            }
         } else{
            Log.v("PROBLEM", "Bundle is null");
         }
@@ -137,7 +138,6 @@ public class FragmentUnitDetail extends Fragment {
     private void setButtonToSaveChanges() {
 
         buttonSaveChanges.setText("Save");
-
         buttonSaveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,7 +151,6 @@ public class FragmentUnitDetail extends Fragment {
     private void switchToEditView(String description) {
 
         onEditMode = true;
-        buttonSaveChanges.setVisibility(View.VISIBLE);
         viewSwitcher.showNext();
 
         if (description.equals("")){
@@ -159,9 +158,10 @@ public class FragmentUnitDetail extends Fragment {
         } else {
             editTextUnitDescripton.setText(description);
         }
-
         setButtonToSaveChanges();
 
+        buttonSaveChanges.setVisibility(View.VISIBLE);
+        viewSwitcher.setVisibility(View.VISIBLE);
     }
 
     public interface OnSaveChangesListener{

@@ -4,20 +4,27 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.santiagogil.a100units.R;
 import com.santiagogil.a100units.model.pojos.Unit;
 
-public class MainActivity extends AppCompatActivity implements FragmentMain.ActivityCommunicator, FragmentUnitDetail.OnSaveChangesListener {
+public class MainActivity extends AppCompatActivity implements FragmentUnitRecyclerView.ActivityCommunicator, FragmentUnitDetail.OnSaveChangesListener {
 
     private FragmentManager fragmentManager;
-    private FragmentMain mainFragment;
+    private FragmentUnitRecyclerView fragmentUnitRecyclerView;
     private FragmentUnitDetail fragmentUnitDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar miToolbar = (Toolbar) findViewById(R.id.toolbar);
+        miToolbar.setTitle("100Blocks");
+        setSupportActionBar(miToolbar);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -39,10 +46,10 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Acti
 
     private void loadMainFragment() {
 
-        mainFragment = new FragmentMain();
-        mainFragment.setActivityCommunicator(MainActivity.this);
+        fragmentUnitRecyclerView = new FragmentUnitRecyclerView();
+        fragmentUnitRecyclerView.setActivityCommunicator(MainActivity.this);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_holder, mainFragment);
+        fragmentTransaction.replace(R.id.fragment_holder, fragmentUnitRecyclerView);
         fragmentTransaction.commit();
 
     }
@@ -67,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Acti
     @Override
     public void saveChanges(Integer position, String description) {
 
-        mainFragment.updateUnit(position, description);
+        fragmentUnitRecyclerView.updateUnit(position, description);
 
     }
 
@@ -78,5 +85,25 @@ public class MainActivity extends AppCompatActivity implements FragmentMain.Acti
             fragmentUnitDetail.saveChanges();
         }
         updateLittleFragment(unit, position);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.switch_view_button:
+
+                fragmentUnitRecyclerView.switchViewMode();
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
