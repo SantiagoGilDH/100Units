@@ -12,6 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Tables
     public static final String TABLEUNITS = "Units";
+    public static final String TABLEUSERS = "Users";
 
     //Columns
     public static final String ID = "ID";
@@ -43,7 +44,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TABLE_UNITS);
 
     }
-
 
 
     @Override

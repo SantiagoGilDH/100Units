@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "484619470960",
+    "firebase_url": "https://blocksoftime-98ed7.firebaseio.com",
+    "project_id": "blocksoftime-98ed7",
+    "storage_bucket": "blocksoftime-98ed7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:484619470960:android:dc8c34a9618f1bc2",
+        "android_client_info": {
+          "package_name": "com.santiagogil.a100units"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "484619470960-rleuudsf67s6s4lqnito3gmko7a2h93a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santiagogil.a100units",
+            "certificate_hash": "f7fa7923e9aec6b05fa990c3619cf9f8c63edcbd"
+          }
+        },
+        {
+          "client_id": "484619470960-52r13rlltkpbvfefq6cb76dbh98b6ic6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBm9C5aS9PxDMa4DkM64wBNW1LoB6USQBM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "484619470960-52r13rlltkpbvfefq6cb76dbh98b6ic6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
