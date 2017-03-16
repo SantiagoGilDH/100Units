@@ -1,6 +1,8 @@
 package com.santiagogil.a100units.view;
 
 
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,6 +19,8 @@ import com.santiagogil.a100units.R;
 
 import org.w3c.dom.Text;
 
+import yuku.ambilwarna.AmbilWarnaDialog;
+
 
 public class FragmentUnitDetail extends Fragment {
 
@@ -29,10 +33,13 @@ public class FragmentUnitDetail extends Fragment {
     private OnSaveChangesListener onSaveChangesListener;
     private Boolean onEditMode;
     private Bundle bundle;
+    private Button buttonChooseColor;
+    private TextView textViewChooseColorPrompt;
 
     public static final String UNITDESCRIPTION = "UnitDescription";
     public static final String UNITID = "UnitID";
     public static final String UNITPOSITION = "UnitPosition";
+    public static final String UNITCOLOR = "UnitColor";
 
     public void setOnSaveChangesListener(OnSaveChangesListener onSaveChangesListener) {
         this.onSaveChangesListener = onSaveChangesListener;
@@ -54,6 +61,8 @@ public class FragmentUnitDetail extends Fragment {
         editTextUnitDescripton = (EditText) view.findViewById(R.id.edit_text_unit_description);
         buttonSaveChanges = (Button) view.findViewById(R.id.button_save_changes);
         viewSwitcher = (ViewSwitcher) view.findViewById(R.id.view_switcher);
+        buttonChooseColor = (Button) view.findViewById(R.id.button_color_chooser);
+        textViewChooseColorPrompt = (TextView) view.findViewById(R.id.text_view_choose_color_prompt);
 
         viewSwitcher.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +79,37 @@ public class FragmentUnitDetail extends Fragment {
 
         updateWithInfoFromBundle();
 
+        buttonChooseColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                showChooseColorDialog();
+
+            }
+
+        });
+
         return view;
+    }
+
+    private void showChooseColorDialog(){
+
+        AmbilWarnaDialog dialog = new AmbilWarnaDialog(getContext(), bundle.getInt(UNITCOLOR) , new AmbilWarnaDialog.OnAmbilWarnaListener() {
+            @Override
+            public void onOk(AmbilWarnaDialog dialog, int color) {
+                // color is the color selected by the user.
+                onSaveChangesListener.updateUnitColor(bundle.getInt(UNITPOSITION), color);
+                buttonChooseColor.setBackgroundColor(color);
+            }
+
+            @Override
+            public void onCancel(AmbilWarnaDialog dialog) {
+                // cancel was selected by the user
+            }
+        });
+
+        dialog.show();
+
     }
 
     private void updateWithInfoFromBundle() {
@@ -83,6 +122,8 @@ public class FragmentUnitDetail extends Fragment {
 
             String unitDescritption = bundle.getString(UNITDESCRIPTION);
 
+            buttonChooseColor.setBackgroundColor(bundle.getInt(UNITCOLOR));
+
             if(unitDescritption.equals("") || unitDescritption.equals(null)){
 
                 switchToEditView(unitDescritption);
@@ -93,12 +134,15 @@ public class FragmentUnitDetail extends Fragment {
                 setButtonToSwitchToEditView();
                 viewSwitcher.setVisibility(View.VISIBLE);
 
+
             }
         } else{
             onEditMode = false;
             buttonSaveChanges.setVisibility(View.INVISIBLE);
             textViewUnitID.setText("Touch a unit");
             textViewUnitDescription.setVisibility(View.INVISIBLE);
+            buttonChooseColor.setVisibility(View.INVISIBLE);
+            textViewChooseColorPrompt.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -112,11 +156,13 @@ public class FragmentUnitDetail extends Fragment {
         if(bundle != null) {
             String updatedDescription = editTextUnitDescripton.getText().toString();
             onSaveChangesListener
-                    .saveChanges(bundle.getInt(UNITPOSITION), updatedDescription);
+                    .saveChanges(bundle.getInt(UNITPOSITION), updatedDescription, getCurrentChosenColor());
             textViewUnitDescription.setText(updatedDescription);
-            viewSwitcher.showPrevious();
             viewSwitcher.setVisibility(View.VISIBLE);
+            buttonChooseColor.setVisibility(View.VISIBLE);
+            textViewChooseColorPrompt.setVisibility(View.VISIBLE);
             if(!updatedDescription.equals("")){
+                viewSwitcher.showPrevious();
                 setButtonToSwitchToEditView();
             }
         } else{
@@ -162,9 +208,20 @@ public class FragmentUnitDetail extends Fragment {
 
         buttonSaveChanges.setVisibility(View.VISIBLE);
         viewSwitcher.setVisibility(View.VISIBLE);
+        buttonChooseColor.setVisibility(View.VISIBLE);
+        textViewChooseColorPrompt.setVisibility(View.VISIBLE);
     }
 
     public interface OnSaveChangesListener{
-        void saveChanges(Integer position, String description);
+        void saveChanges(Integer position, String description, Integer color);
+        void updateUnitColor(Integer position, Integer color);
+    }
+
+    public Integer getCurrentChosenColor() {
+
+        ColorDrawable buttonColor = (ColorDrawable) buttonChooseColor.getBackground();
+        return (Integer) buttonColor.getColor();
+
     }
 }
+

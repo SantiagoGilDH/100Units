@@ -1,12 +1,10 @@
 package com.santiagogil.a100units.model.pojos;
 
-import android.graphics.Color;
-
 public class Unit {
 
     private String ID;
     private String description;
-    private Color color;
+    private Integer color;
 
     public String getID() {
         return ID;
@@ -25,11 +23,11 @@ public class Unit {
         this.description = description;
     }
 
-    public Color getColor() {
+    public Integer getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(Integer color) {
         this.color = color;
     }
 }

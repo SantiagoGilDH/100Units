@@ -28,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_UNITS = "CREATE TABLE " + TABLEUNITS + " ("
             + ID + " STRING PRIMARY KEY, "
             + DESCRIPTION + " STRING, "
-            + COLOR + " STRING, "
+            + COLOR + " NUMBER, "
             + USER + " STRING "
             + ")";
 

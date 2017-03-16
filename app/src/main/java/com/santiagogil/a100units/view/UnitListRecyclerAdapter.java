@@ -54,11 +54,13 @@ public class UnitListRecyclerAdapter extends UnitRecyclerAdapter {
         private TextView textView;
         private TextView textViewUnitDescription;
         private FragmentUnitRecyclerView.ActivityCommunicator activityCommunicator;
+        private LinearLayout linearLayout;
 
         public UnitViewHolder(final View itemView, final FragmentUnitRecyclerView.ActivityCommunicator activityCommunicator) {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.text_view_unit_id);
             textViewUnitDescription = (TextView) itemView.findViewById(R.id.text_view_unit_description);
+            linearLayout = (LinearLayout) itemView.findViewById(R.id.inner_layout);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -72,6 +74,7 @@ public class UnitListRecyclerAdapter extends UnitRecyclerAdapter {
         public void loadUnit(Unit unit) {
             this.unit = unit;
             textView.setText(unit.getID() + ": ");
+            linearLayout.setBackgroundColor(unit.getColor());
             if(unit.getDescription().equals("")){
                 textViewUnitDescription.setText("Add a Description");
             } else {

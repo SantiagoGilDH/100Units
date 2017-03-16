@@ -70,9 +70,7 @@ public class UnitGridRecyclerAdapter extends UnitRecyclerAdapter {
         public void loadUnit(Unit unit) {
             this.unit = unit;
             textView.setText(unit.getID());
-            if(!unit.getDescription().equals("")){
-                innerLayout.setBackgroundColor(Color.CYAN);
-            }
+            innerLayout.setBackgroundColor(unit.getColor());
         }
     }
 }

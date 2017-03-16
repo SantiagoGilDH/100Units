@@ -1,5 +1,6 @@
 package com.santiagogil.a100units.view;
 
+import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -64,6 +65,11 @@ public class MainActivity extends AppCompatActivity implements FragmentUnitRecyc
         bundle.putString(FragmentUnitDetail.UNITDESCRIPTION, unit.getDescription());
         bundle.putString(FragmentUnitDetail.UNITID, unit.getID());
         bundle.putInt(FragmentUnitDetail.UNITPOSITION, position);
+        if(unit.getColor() == null){
+            bundle.putInt(FragmentUnitDetail.UNITCOLOR, Color.WHITE);
+        } else {
+            bundle.putInt(FragmentUnitDetail.UNITCOLOR, unit.getColor());
+        }
         fragmentUnitDetail.setArguments(bundle);
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.little_fragment_holder, fragmentUnitDetail);
@@ -72,9 +78,16 @@ public class MainActivity extends AppCompatActivity implements FragmentUnitRecyc
     }
 
     @Override
-    public void saveChanges(Integer position, String description) {
+    public void saveChanges(Integer position, String description, Integer color) {
 
-        fragmentUnitRecyclerView.updateUnit(position, description);
+        fragmentUnitRecyclerView.updateUnit(position, description, color);
+
+    }
+
+    @Override
+    public void updateUnitColor(Integer position, Integer color) {
+
+        fragmentUnitRecyclerView.updateUnitColor(position, color);
 
     }
 

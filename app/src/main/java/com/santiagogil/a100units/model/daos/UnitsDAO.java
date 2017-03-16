@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 
 import com.santiagogil.a100units.model.pojos.Unit;
 import com.santiagogil.a100units.utils.DatabaseHelper;
@@ -29,6 +30,7 @@ public class UnitsDAO {
             Unit unit = new Unit();
             unit.setID(i.toString());
             unit.setDescription("");
+            unit.setColor(Color.WHITE);
             addUnitToDatabase(unit);
         }
     }
@@ -41,6 +43,7 @@ public class UnitsDAO {
 
         row.put(DatabaseHelper.ID, unit.getID());
         row.put(DatabaseHelper.DESCRIPTION, unit.getDescription());
+        row.put(DatabaseHelper.COLOR, unit.getColor());
 
         database.insert(DatabaseHelper.TABLEUNITS, null, row);
 
@@ -63,6 +66,7 @@ public class UnitsDAO {
             Unit unit = new Unit();
             unit.setID(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ID)));
             unit.setDescription(cursor.getString(cursor.getColumnIndex(DatabaseHelper.DESCRIPTION)));
+            unit.setColor(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.COLOR)));
 
             units.add(unit);
 
@@ -72,13 +76,25 @@ public class UnitsDAO {
 
     }
 
-    public void updateUnitDescription(Integer position, String description) {
+    public void updateUnit(Integer position, String description, Integer color) {
 
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
 
         cv.put(DatabaseHelper.DESCRIPTION, description);
+        cv.put(DatabaseHelper.COLOR, color);
+
+        database.update(DatabaseHelper.TABLEUNITS, cv, DatabaseHelper.ID + " = " + (position + 1), null);
+    }
+
+    public void updateUnitColor(Integer position, Integer color) {
+
+        SQLiteDatabase database = databaseHelper.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+
+        cv.put(DatabaseHelper.COLOR, color);
 
         database.update(DatabaseHelper.TABLEUNITS, cv, DatabaseHelper.ID + " = " + (position + 1), null);
     }

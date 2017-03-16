@@ -5,7 +5,6 @@ import android.content.Context;
 import com.santiagogil.a100units.model.daos.UnitsDAO;
 import com.santiagogil.a100units.model.pojos.Unit;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UnitsController {
@@ -24,10 +23,16 @@ public class UnitsController {
 
     }
 
-    public void updateUnitDescription(Context context, Integer position, String description) {
+    public void updateUnit(Context context, Integer position, String description, Integer color) {
 
         UnitsDAO unitsDao = new UnitsDAO(context);
-        unitsDao.updateUnitDescription(position, description);
+        unitsDao.updateUnit(position, description, color);
 
+    }
+
+    public void updateUnitColor(Context context, Integer position, Integer color) {
+
+        UnitsDAO unitsDao = new UnitsDAO(context);
+        unitsDao.updateUnitColor(position, color);
     }
 }

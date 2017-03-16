@@ -33,7 +33,7 @@ public class FragmentUnitRecyclerView extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_unit_recycler_view, container, false);
 
         onListViewMode = false;
         onGridViewMode = false;
@@ -45,10 +45,10 @@ public class FragmentUnitRecyclerView extends Fragment {
         return view;
     }
 
-    public void updateUnit(Integer position, String description) {
+    public void updateUnit(Integer position, String description, Integer color) {
 
             UnitsController unitsController = new UnitsController();
-            unitsController.updateUnitDescription(getContext(), position, description);
+            unitsController.updateUnit(getContext(), position, description, color);
             unitRecyclerAdapter.setUnits(unitsController.getUnits(getContext()));
             unitRecyclerAdapter.notifyDataSetChanged();
     }
@@ -86,14 +86,12 @@ public class FragmentUnitRecyclerView extends Fragment {
 
     }
 
-    private void toggleOnGridViewMode() {
+    public void updateUnitColor(Integer position, Integer color) {
 
-        onGridViewMode = !onGridViewMode;
-    }
-
-    private void toggleOnListViewMode(){
-
-        onListViewMode = !onListViewMode;
+        UnitsController unitsController = new UnitsController();
+        unitsController.updateUnitColor(getContext(), position, color);
+        unitRecyclerAdapter.setUnits(unitsController.getUnits(getContext()));
+        unitRecyclerAdapter.notifyDataSetChanged();
     }
 
     public interface ActivityCommunicator{
